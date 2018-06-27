@@ -626,7 +626,7 @@ table.CodeRay td.code>pre{padding:0}
 <span id="author" class="author">Maksim Kostromin</span><br>
 <span id="email" class="email"><a href="mailto:daggerok@gmail.com">daggerok@gmail.com</a></span><br>
 <span id="revnumber">version 0.0.1-SNAPSHOT,</span>
-<span id="revdate">2018-06-27 10:59:51 UTC</span>
+<span id="revdate">2018-06-27 11:13:26 UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -733,11 +733,15 @@ touch hello-service/pom.xml
 <div class="listingblock">
 <div class="title">HelloServiceImpl interface:</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">HelloServiceImpl</span> <span class="directive">implements</span> HelloService {
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@RequiredArgsConstructor</span>
+<span class="directive">public</span> <span class="type">class</span> <span class="class">HelloServiceImpl</span> <span class="directive">implements</span> HelloService {
+
+  <span class="directive">final</span> <span class="predefined-type">String</span> prefix;
+  <span class="directive">final</span> <span class="predefined-type">String</span> suffix;
 
   <span class="annotation">@Override</span>
   <span class="directive">public</span> <span class="predefined-type">String</span> sayHello(<span class="predefined-type">String</span> whom) {
-    <span class="keyword">return</span> format(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello, %s!</span><span class="delimiter">&quot;</span></span>, whom);
+    <span class="keyword">return</span> format(<span class="string"><span class="delimiter">&quot;</span><span class="content">%s%s%s</span><span class="delimiter">&quot;</span></span>, prefix, whom, suffix);
   }
 }</code></pre>
 </div>
@@ -784,13 +788,15 @@ touch hello-service-autoconfigure/pom.xml
 <pre class="CodeRay highlight"><code data-lang="java"><span class="comment">/**
  * Apply auto configuration only if {@link HelloService} class is in classpath.
  */</span>
-<span class="annotation">@ConditionalOnClass</span>(HelloService.class)
 <span class="annotation">@Configuration</span>
+<span class="annotation">@RequiredArgsConstructor</span>
+<span class="annotation">@ConditionalOnClass</span>(HelloService.class)
 <span class="directive">public</span> <span class="type">class</span> <span class="class">HelloServiceAutoConfiguration</span> {
 
+  <span class="annotation">@ConditionalOnMissingBean</span>(HelloService.class)
   <span class="annotation">@Bean</span>
   <span class="directive">public</span> HelloService helloService() {
-    <span class="directive">final</span> HelloServiceImpl helloService = <span class="keyword">new</span> HelloServiceImpl();
+    <span class="directive">final</span> HelloServiceImpl helloService = <span class="keyword">new</span> HelloServiceImpl(<span class="predefined-constant">null</span>, <span class="predefined-constant">null</span>);
     <span class="keyword">return</span> helloService;
   }
 }</code></pre>
@@ -952,34 +958,34 @@ touch spring-boot-starter-hello-tests/pom.xml
 <div class="listingblock">
 <div class="title">2. add to your pom.xml started:</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">  &lt;dependencies&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-      &lt;artifactId&gt;spring-boot-starter&lt;/artifactId&gt;
-    &lt;/dependency&gt;
+<pre class="CodeRay highlight"><code data-lang="xml">  <span class="tag">&lt;dependencies&gt;</span>
+    <span class="tag">&lt;dependency&gt;</span>
+      <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+      <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;/dependency&gt;</span>
 
-    &lt;dependency&gt;
-      &lt;groupId&gt;com.github.daggerok&lt;/groupId&gt;
-      &lt;artifactId&gt;spring-boot-starter-hello&lt;/artifactId&gt;
-    &lt;/dependency&gt;
+    <span class="tag">&lt;dependency&gt;</span>
+      <span class="tag">&lt;groupId&gt;</span>com.github.daggerok<span class="tag">&lt;/groupId&gt;</span>
+      <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-hello<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;/dependency&gt;</span>
 
-    &lt;dependency&gt;
-      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-      &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
-    &lt;/dependency&gt;
-  &lt;/dependencies&gt;</code></pre>
+    <span class="tag">&lt;dependency&gt;</span>
+      <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+      <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-test<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;/dependency&gt;</span>
+  <span class="tag">&lt;/dependencies&gt;</span></code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">3. and use it like any other spring-boot starters:</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="bash">@Log4j2
-@SpringBootApplication
-public class HelloStarterTestApplication {
-  public static void main(String[] args) {
-    final ConfigurableApplicationContext context = SpringApplication.run(HelloStarterTestApplication.class, args);
-    final HelloService helloService = context.getBean(HelloService.class);
-    log.info(&quot;Hello result: {}&quot;, () -&gt; helloService.sayHello(&quot;ololo-trololo&quot;));
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@Log4j2</span>
+<span class="annotation">@SpringBootApplication</span>
+<span class="directive">public</span> <span class="type">class</span> <span class="class">HelloStarterTestApplication</span> {
+  <span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> main(<span class="predefined-type">String</span><span class="type">[]</span> args) {
+    <span class="directive">final</span> ConfigurableApplicationContext context = SpringApplication.run(HelloStarterTestApplication.class, args);
+    <span class="directive">final</span> HelloService helloService = context.getBean(HelloService.class);
+    log.info(() -&gt; helloService.sayHello(<span class="string"><span class="delimiter">&quot;</span><span class="content">ololo-trololo</span><span class="delimiter">&quot;</span></span>));
   }
 }</code></pre>
 </div>
@@ -1008,7 +1014,7 @@ public class HelloStarterTestApplication {
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2018-06-27 10:59:51 UTC
+Last updated 2018-06-27 11:13:26 UTC
 </div>
 </div>
 </body>

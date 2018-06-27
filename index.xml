@@ -4,7 +4,7 @@
 <book xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>spring-boot-starter-example (0.0.1-SNAPSHOT)</title>
-<date>2018-06-27 10:59:51 UTC</date>
+<date>2018-06-27 11:13:26 UTC</date>
 <author>
 <personname>
 <firstname>Maksim</firstname>
@@ -16,7 +16,7 @@
 <revhistory>
 <revision>
 <revnumber>0.0.1-SNAPSHOT</revnumber>
-<date>2018-06-27 10:59:51 UTC</date>
+<date>2018-06-27 11:13:26 UTC</date>
 <authorinitials>MK</authorinitials>
 </revision>
 </revhistory>
@@ -81,11 +81,15 @@ public interface HelloService {
 <formalpara>
 <title>HelloServiceImpl interface:</title>
 <para>
-<programlisting language="java" linenumbering="unnumbered">public class HelloServiceImpl implements HelloService {
+<programlisting language="java" linenumbering="unnumbered">@RequiredArgsConstructor
+public class HelloServiceImpl implements HelloService {
+
+  final String prefix;
+  final String suffix;
 
   @Override
   public String sayHello(String whom) {
-    return format("Hello, %s!", whom);
+    return format("%s%s%s", prefix, whom, suffix);
   }
 }</programlisting>
 </para>
@@ -122,13 +126,15 @@ touch hello-service-autoconfigure/pom.xml
 <programlisting language="java" linenumbering="unnumbered">/**
  * Apply auto configuration only if {@link HelloService} class is in classpath.
  */
-@ConditionalOnClass(HelloService.class)
 @Configuration
+@RequiredArgsConstructor
+@ConditionalOnClass(HelloService.class)
 public class HelloServiceAutoConfiguration {
 
+  @ConditionalOnMissingBean(HelloService.class)
   @Bean
   public HelloService helloService() {
-    final HelloServiceImpl helloService = new HelloServiceImpl();
+    final HelloServiceImpl helloService = new HelloServiceImpl(null, null);
     return helloService;
   }
 }</programlisting>
@@ -267,7 +273,7 @@ touch spring-boot-starter-hello-tests/pom.xml
 <formalpara>
 <title>2. add to your pom.xml started:</title>
 <para>
-<programlisting language="bash" linenumbering="unnumbered">  &lt;dependencies&gt;
+<programlisting language="xml" linenumbering="unnumbered">  &lt;dependencies&gt;
     &lt;dependency&gt;
       &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
       &lt;artifactId&gt;spring-boot-starter&lt;/artifactId&gt;
@@ -288,13 +294,13 @@ touch spring-boot-starter-hello-tests/pom.xml
 <formalpara>
 <title>3. and use it like any other spring-boot starters:</title>
 <para>
-<programlisting language="bash" linenumbering="unnumbered">@Log4j2
+<programlisting language="java" linenumbering="unnumbered">@Log4j2
 @SpringBootApplication
 public class HelloStarterTestApplication {
   public static void main(String[] args) {
     final ConfigurableApplicationContext context = SpringApplication.run(HelloStarterTestApplication.class, args);
     final HelloService helloService = context.getBean(HelloService.class);
-    log.info("Hello result: {}", () -&gt; helloService.sayHello("ololo-trololo"));
+    log.info(() -&gt; helloService.sayHello("ololo-trololo"));
   }
 }</programlisting>
 </para>
