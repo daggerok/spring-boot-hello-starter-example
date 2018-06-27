@@ -11,13 +11,19 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 @ConfigurationProperties("com.github.daggerok")
 public class HelloProperties {
 
+  /** Greeting properties */
   Hello hello = new Hello();
 
   @Data
   @NoArgsConstructor
   @Accessors(chain = true)
   public static class Hello {
-    String prefix, suffix;
+
+    /** Greeting prefix */
+    String prefix;
+
+    /** Greeting suffix */
+    String suffix;
 
     public String getPrefix() {
       return null == prefix || prefix.trim().isEmpty()

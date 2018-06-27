@@ -71,7 +71,7 @@ public class HelloStarterAutoConfigurationTests {
 
     @Bean
     public HelloService helloService() {
-      return new HelloServiceImpl("<", ">");
+      return new HelloServiceImpl("<", " >");
     }
   }
 
@@ -83,7 +83,7 @@ public class HelloStarterAutoConfigurationTests {
         .hasSize(1);
 
     assertThat(context.getBean(HelloService.class).sayHello("ololo"))
-        .isEqualTo("<ololo>");
+        .isEqualTo("< ololo >");
   }
 }
 //end::content[]
