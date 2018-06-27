@@ -4,7 +4,7 @@
 <book xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>spring-boot-starter-example (0.0.1-SNAPSHOT)</title>
-<date>2018-06-27 12:30:28 UTC</date>
+<date>2018-06-27 12:32:13 UTC</date>
 <author>
 <personname>
 <firstname>Maksim</firstname>
@@ -16,7 +16,7 @@
 <revhistory>
 <revision>
 <revnumber>0.0.1-SNAPSHOT</revnumber>
-<date>2018-06-27 12:30:28 UTC</date>
+<date>2018-06-27 12:32:13 UTC</date>
 <authorinitials>MK</authorinitials>
 </revision>
 </revhistory>
@@ -356,13 +356,13 @@ public class HelloStarterTestApplication {
 <title>Other links</title>
 <itemizedlist>
 <listitem>
-<simpara>link:https://www.youtube.com/watch?v=N39hpGAT43s</simpara>
+<simpara><link xl:href="https://www.youtube.com/watch?v=N39hpGAT43s">YouTube: It&#8217;s a kind of magic: under the covers of Spring Boot - Stéphane Nicoll &amp; Andy Wilkinson</link></simpara>
 </listitem>
 <listitem>
-<simpara>link:https://github.com/snicoll-demos/hello-service-auto-configuration</simpara>
+<simpara><link xl:href="https://github.com/snicoll-demos/hello-service-auto-configuration">GitHub: snicoll-demos/hello-service-auto-configuration</link></simpara>
 </listitem>
 <listitem>
-<simpara>link:https://github.com/snicoll/amqp-10-jms-spring-boot</simpara>
+<simpara><link xl:href="https://github.com/snicoll/amqp-10-jms-spring-boot">other GitHub repo</link></simpara>
 </listitem>
 </itemizedlist>
 </chapter>
