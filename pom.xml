@@ -61,13 +61,13 @@
 
       <dependency>
         <groupId>com.github.daggerok</groupId>
-        <artifactId>spring-boot-starter-hello</artifactId>
+        <artifactId>spring-boot-starter-hello-autoconfigure</artifactId>
         <version>0.0.1-SNAPSHOT</version>
       </dependency>
 
       <dependency>
         <groupId>com.github.daggerok</groupId>
-        <artifactId>spring-boot-starter-hello-autoconfigure</artifactId>
+        <artifactId>spring-boot-starter-hello</artifactId>
         <version>0.0.1-SNAPSHOT</version>
       </dependency>
     </dependencies>
