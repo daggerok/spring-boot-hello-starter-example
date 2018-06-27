@@ -1,0 +1,43 @@
+language: java
+jdk: oraclejdk8
+
+addons:
+  apt:
+    update: true
+    packages:
+    - bash
+    - curl
+    - sudo
+    - python-pip
+
+install: true
+before_script:
+- sudo pip install httpie >/dev/null 2>&1
+- source <(curl -s https://raw.githubusercontent.com/daggerok/bash-functions/master/main.bash)
+- stop_any 8080 80
+
+script:
+- bash mvnw
+
+before_deploy:
+- ./mvnw -Pdocs
+
+env:
+  global:
+  - TERM=dumb
+
+deploy:
+  provider: pages
+  skip-cleanup: true
+  # travis encrypt GITHUB_TOKEN=<your github repo token> --add
+  github-token: "$GITHUB_TOKEN"
+  keep-history: true
+  on:
+    branch: master
+  local-dir: target/generated-docs
+  target_branch: gh-pages
+
+cache:
+  directories:
+  - $HOME/.m2
+  - $HOME/.docker
