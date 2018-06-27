@@ -9,7 +9,7 @@
   <packaging>pom</packaging>
 
   <name>spring-boot-starter-hello-example</name>
-  <description>Hello Spring Boot Starter AutoConfiguration Example</description>
+  <description>Spring Boot Starter AutoConfiguration Example</description>
   <url>https://github.com/daggerok/spring-boot-starter-example</url>
 
   <licenses>
