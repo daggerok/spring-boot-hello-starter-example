@@ -4,13 +4,13 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.github.daggerok</groupId>
-  <artifactId>spring-boot-hello-starter-example</artifactId>
+  <artifactId>spring-boot-starter-hello-example</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>spring-boot-hello-starter-example</name>
+  <name>spring-boot-starter-hello-example</name>
   <description>Hello Spring Boot Starter AutoConfiguration Example</description>
-  <url>https://github.com/daggerok/spring-boot-hello-starter-example</url>
+  <url>https://github.com/daggerok/spring-boot-starter-hello-example</url>
 
   <licenses>
     <license>
@@ -20,9 +20,9 @@
   </licenses>
 
   <scm>
-    <url>https://github.com/daggerok/spring-boot-hello-starter-example.git</url>
-    <connection>scm:git:git://github.com/daggerok/spring-boot-hello-starter-example.git</connection>
-    <developerConnection>scm:git:git@github.com:daggerok/spring-boot-hello-starter-example.git</developerConnection>
+    <url>https://github.com/daggerok/spring-boot-starter-hello-example.git</url>
+    <connection>scm:git:git://github.com/daggerok/spring-boot-starter-hello-example.git</connection>
+    <developerConnection>scm:git:git@github.com:daggerok/spring-boot-starter-hello-example.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
@@ -42,9 +42,9 @@
   </properties>
 
   <modules>
-    <module>hello-autoconfigure</module>
-    <module>hello-starter</module>
-    <module>hello-tests</module>
+    <module>spring-boot-starter-hello-autoconfigure</module>
+    <module>spring-boot-starter-hello</module>
+    <module>spring-boot-starter-hello-tests</module>
   </modules>
 
   <dependencies>
