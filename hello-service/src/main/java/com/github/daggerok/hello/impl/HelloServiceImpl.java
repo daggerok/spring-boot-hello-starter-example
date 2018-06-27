@@ -14,7 +14,7 @@ public class HelloServiceImpl implements HelloService {
 
   @Override
   public String sayHello(String whom) {
-    return format("%s %s%s", prefix.trim(), whom, suffix.trim());
+    return format("%s %s%s", prefix, whom, suffix);
   }
 }
 //end::content[]
