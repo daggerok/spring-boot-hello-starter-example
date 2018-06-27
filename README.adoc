@@ -9,7 +9,7 @@ image:https://img.shields.io/bitbucket/pipelines/daggerok/spring-boot-hello-star
 
 spring-boot magic...
 
-Read github pages link:https://daggerok.github.io/spring-boot-hello-starter-example[reference documentation]
+Read github pages link:https://daggerok.github.io/spring-boot-starter-hello-example[reference documentation]
 
 ////
 .maven build
