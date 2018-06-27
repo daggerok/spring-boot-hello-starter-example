@@ -5,9 +5,9 @@ addons:
   apt:
     update: true
     packages:
-    - bash
     - curl
     - sudo
+    - lsof
     - python-pip
 
 install: true
@@ -17,7 +17,7 @@ before_script:
 - stop_any 8080 80
 
 script:
-- bash mvnw
+- ./mvnw
 
 before_deploy:
 - ./mvnw -Pdocs
