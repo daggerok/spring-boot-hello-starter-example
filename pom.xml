@@ -292,7 +292,7 @@
                 <source-highlighter>coderay</source-highlighter>
                 <toc-title>Table of Contents</toc-title>
                 <project-name>${project.artifactId}</project-name>
-                <root-project-name>${project.artifactId}</root-project-name>
+                <root-project-name>spring-boot-hello-starter-example</root-project-name>
                 <project-version>${project.version}</project-version>
                 <github-url>https://github.com/daggerok/${project.artifactId}</github-url>
               </attributes>

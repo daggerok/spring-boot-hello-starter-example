@@ -37,7 +37,7 @@ To create starter we need minimal projects structure:
 
 - autoconfigure project: `spring-boot-starter-hello-autoconfigure`
 - start project: `spring-boot-starter-hello`
-- testing project: `spring-boot-spring-boot-starter-hello-tests`
+- testing project: `spring-boot-starter-hello-tests`
 
 == Links
 
