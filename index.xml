@@ -4,7 +4,7 @@
 <book xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>spring-boot-hello-starter-example (0.0.1-SNAPSHOT)</title>
-<date>2018-06-27 08:07:37 UTC</date>
+<date>2018-06-27 08:09:10 UTC</date>
 <author>
 <personname>
 <firstname>Maksim</firstname>
@@ -16,7 +16,7 @@
 <revhistory>
 <revision>
 <revnumber>0.0.1-SNAPSHOT</revnumber>
-<date>2018-06-27 08:07:37 UTC</date>
+<date>2018-06-27 08:09:10 UTC</date>
 <authorinitials>MK</authorinitials>
 </revision>
 </revhistory>
@@ -56,7 +56,7 @@
 <title>Links</title>
 <itemizedlist>
 <listitem>
-<simpara><link xl:href="https://github.com/daggerok/spring-boot-starter-hello-example">GitHub repo</link></simpara>
+<simpara><link xl:href="https://github.com/daggerok/spring-boot-hello-starter-example">GitHub repo</link></simpara>
 </listitem>
 <listitem>
 <simpara><link xl:href="https://daggerok.github.io/spring-boot-hello-starter-example">GitHub pages</link></simpara>
