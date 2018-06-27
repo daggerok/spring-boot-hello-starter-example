@@ -10,7 +10,7 @@
 
   <name>spring-boot-starter-hello-example</name>
   <description>Hello Spring Boot Starter AutoConfiguration Example</description>
-  <url>https://github.com/daggerok/spring-boot-starter-hello-example</url>
+  <url>https://github.com/daggerok/spring-boot-hello-starter-example</url>
 
   <licenses>
     <license>
@@ -20,9 +20,9 @@
   </licenses>
 
   <scm>
-    <url>https://github.com/daggerok/spring-boot-starter-hello-example.git</url>
-    <connection>scm:git:git://github.com/daggerok/spring-boot-starter-hello-example.git</connection>
-    <developerConnection>scm:git:git@github.com:daggerok/spring-boot-starter-hello-example.git</developerConnection>
+    <url>https://github.com/daggerok/spring-boot-hello-starter-example.git</url>
+    <connection>scm:git:git://github.com/daggerok/spring-boot-hello-starter-example.git</connection>
+    <developerConnection>scm:git:git@github.com:daggerok/spring-boot-hello-starter-example.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 

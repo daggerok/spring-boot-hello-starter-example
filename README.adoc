@@ -1,15 +1,15 @@
-= spring-boot-starter-hello-example image:https://travis-ci.org/daggerok/spring-boot-starter-hello-example.svg?branch=master["Build Status", link="https://travis-ci.org/daggerok/spring-boot-starter-hello-example"]
+= spring-boot-hello-starter-example image:https://travis-ci.org/daggerok/spring-boot-hello-starter-example.svg?branch=master["Build Status", link="https://travis-ci.org/daggerok/spring-boot-hello-starter-example"]
 
 ////
-image:https://gitlab.com/daggerok/spring-boot-starter-hello-example/badges/master/build.svg["Build Status", link="https://gitlab.com/daggerok/spring-boot-starter-hello-example/-/jobs"]
-image:https://img.shields.io/bitbucket/pipelines/daggerok/spring-boot-starter-hello-example.svg["Build Status", link="https://bitbucket.com/daggerok/spring-boot-starter-hello-example"]
+image:https://gitlab.com/daggerok/spring-boot-hello-starter-example/badges/master/build.svg["Build Status", link="https://gitlab.com/daggerok/spring-boot-hello-starter-example/-/jobs"]
+image:https://img.shields.io/bitbucket/pipelines/daggerok/spring-boot-hello-starter-example.svg["Build Status", link="https://bitbucket.com/daggerok/spring-boot-hello-starter-example"]
 ////
 
 //tag::content[]
 
 spring-boot magic...
 
-Read github pages link:https://daggerok.github.io/spring-boot-starter-hello-example[reference documentation]
+Read github pages link:https://daggerok.github.io/spring-boot-hello-starter-example[reference documentation]
 
 ////
 .maven build
