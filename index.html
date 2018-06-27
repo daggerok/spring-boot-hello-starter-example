@@ -626,7 +626,7 @@ table.CodeRay td.code>pre{padding:0}
 <span id="author" class="author">Maksim Kostromin</span><br>
 <span id="email" class="email"><a href="mailto:daggerok@gmail.com">daggerok@gmail.com</a></span><br>
 <span id="revnumber">version 0.0.1-SNAPSHOT,</span>
-<span id="revdate">2018-06-27 10:43:19 UTC</span>
+<span id="revdate">2018-06-27 10:59:51 UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -737,7 +737,7 @@ touch hello-service/pom.xml
 
   <span class="annotation">@Override</span>
   <span class="directive">public</span> <span class="predefined-type">String</span> sayHello(<span class="predefined-type">String</span> whom) {
-    <span class="keyword">return</span> <span class="predefined-constant">null</span>;
+    <span class="keyword">return</span> format(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello, %s!</span><span class="delimiter">&quot;</span></span>, whom);
   }
 }</code></pre>
 </div>
@@ -804,7 +804,7 @@ auto-configurations for us if starter in classpath according to conditions</p>
 <div class="title">file <code>./hello-service-autoconfigure/src/main/java/com/github/daggerok/hello/config/HelloServiceAutoConfiguration.java</code>:</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="properties">org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.github.daggerok.hello.config.HelloServiceAutoConfiguration</code></pre>
+com.github.daggerok.hello.config.HelloServiceAutoConfiguration</code></pre>
 </div>
 </div>
 </div>
@@ -1008,7 +1008,7 @@ public class HelloStarterTestApplication {
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2018-06-27 10:43:19 UTC
+Last updated 2018-06-27 10:59:51 UTC
 </div>
 </div>
 </body>
