@@ -35,9 +35,135 @@ include::../README.adoc[tags=content]
 
 To create starter we need minimal projects structure:
 
-- autoconfigure project: `spring-boot-starter-hello-autoconfigure`
-- start project: `spring-boot-starter-hello`
-- testing project: `spring-boot-starter-hello-tests`
+- service with functionality we wanna expose / integrate: `hello-service`
+- module which will be automatically configure that service as far starter was added as a dependency: `hello-service-autoconfigure`
+- starter module, containing everything needed (hello-service + auto-config + other dependencies): `spring-boot-starter-hello`
+
+NOTE: we will be using and testing out starter in project: `spring-boot-starter-hello-tests`
+
+=== hello-service
+
+First, create service with functionality you wanna to share with the world
+
+[source,bash]
+----
+mkdir hello-service
+touch hello-service/pom.xml
+# ...
+----
+
+That module contains HelloService we wanna expose:
+
+.HelloService interface:
+[source,java]
+----
+include::../hello-service/src/main/java/com/github/daggerok/hello/HelloService.java[tags=content]
+----
+
+.HelloServiceImpl interface:
+[source,java]
+----
+include::../hello-service/src/main/java/com/github/daggerok/hello/impl/HelloServiceImpl.java[tags=content]
+----
+
+=== hello-service-autoconfigure
+
+Next, crete auto-configuration module for hello-service
+
+[source,bash]
+----
+mkdir hello-service-autoconfigure
+touch hello-service-autoconfigure/pom.xml
+# ...
+----
+
+That module will depends on `hello-service` module and spring-boot auto-configuration dependencies
+
+.file `hello-service-autoconfigure/pom.xml`:
+[source,xml]
+----
+include::../hello-service-autoconfigure/pom.xml[tags=content]
+----
+
+Here we are creating auto-configuration which is basically will be picked up if `HelloService` class in classpath
+
+.file `./hello-service-autoconfigure/src/main/java/com/github/daggerok/hello/config/HelloServiceAutoConfiguration.java`:
+[source,java]
+----
+include::../hello-service-autoconfigure/src/main/java/com/github/daggerok/hello/config/HelloServiceAutoConfiguration.java[tags=content]
+----
+
+To make it happens, we need provide `spring.factories` file, which spring-boot will identify and create needed
+auto-configurations for us if starter in classpath according to conditions
+
+.file `./hello-service-autoconfigure/src/main/java/com/github/daggerok/hello/config/HelloServiceAutoConfiguration.java`:
+[source,properties]
+----
+include::../hello-service-autoconfigure/src/main/resources/META-INF/spring.factories[]
+----
+
+=== spring-boot-starter-hello
+
+Now we are ready to go create starter itself
+
+[source,bash]
+----
+mkdir spring-boot-starter-hello
+touch spring-boot-starter-hello/pom.xml
+# ...
+----
+
+That starter will define in dependencies everything needed
+
+.file `spring-boot-starter-hello/pom.xml`:
+[source,xml]
+----
+include::../spring-boot-starter-hello/pom.xml[tags=content]
+----
+
+.that module also has auto-configuration `HelloStarterAutoConfiguration.java`:
+[source,java]
+----
+include::../spring-boot-starter-hello/src/main/java/com/github/daggerok/starter/HelloStarterAutoConfiguration.java[tags=content]
+----
+
+.and `spring.factories` file:
+[source,properties]
+----
+include::../spring-boot-starter-hello/src/main/resources/META-INF/spring.factories[]
+----
+
+.it's very important test your auto configuration if it's properly works:
+[source,java]
+----
+include::../spring-boot-starter-hello/src/test/java/com/github/daggerok/starter/HelloStarterAutoConfigurationTests.java[tags=content]
+----
+
+NOTE: Here we are testing that HelloService bean was properly instantiated and found in application context.
+
+== Testing
+
+To test starter, all you need to do is:
+
+.1. create module for it:
+[source,bash]
+----
+mkdir spring-boot-starter-hello-tests
+touch spring-boot-starter-hello-tests/pom.xml
+# ...
+----
+
+.2. add to your pom.xml started:
+[source,bash]
+----
+include::../spring-boot-starter-hello-tests/pom.xml[tags=content]
+----
+
+.3. and use it like any other spring-boot starters:
+[source,bash]
+----
+include::../spring-boot-starter-hello-tests/src/main/java/com/github/daggerok/tests/HelloStarterTestApplication.java[tags=content]
+----
 
 == Links
 

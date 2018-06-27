@@ -17,7 +17,8 @@ before_script:
 - stop_any 8080 80
 
 script:
-- ./mvnw
+- ./mvnw >/dev/null
+- ./spring-boot-starter-hello-tests/target/spring-boot-starter-hello-tests-0.0.1-SNAPSHOT.jar
 
 before_deploy:
 - ./mvnw -Pdocs

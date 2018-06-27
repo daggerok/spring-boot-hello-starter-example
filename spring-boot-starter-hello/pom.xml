@@ -9,6 +9,7 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
 
+  <!-- tag::content[] -->
   <artifactId>spring-boot-starter-hello</artifactId>
   <packaging>jar</packaging>
 
@@ -32,7 +33,13 @@
 
     <dependency>
       <groupId>com.github.daggerok</groupId>
-      <artifactId>spring-boot-starter-hello-autoconfigure</artifactId>
+      <artifactId>hello-service</artifactId>
+    </dependency>
+
+    <dependency>
+      <groupId>com.github.daggerok</groupId>
+      <artifactId>hello-service-autoconfigure</artifactId>
     </dependency>
   </dependencies>
+  <!-- end::content[] -->
 </project>

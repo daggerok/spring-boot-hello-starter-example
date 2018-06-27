@@ -44,7 +44,8 @@
   </properties>
 
   <modules>
-    <module>spring-boot-starter-hello-autoconfigure</module>
+    <module>hello-service</module>
+    <module>hello-service-autoconfigure</module>
     <module>spring-boot-starter-hello</module>
     <module>spring-boot-starter-hello-tests</module>
   </modules>
@@ -73,7 +74,13 @@
 
       <dependency>
         <groupId>com.github.daggerok</groupId>
-        <artifactId>spring-boot-starter-hello-autoconfigure</artifactId>
+        <artifactId>hello-service</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+
+      <dependency>
+        <groupId>com.github.daggerok</groupId>
+        <artifactId>hello-service-autoconfigure</artifactId>
         <version>${project.version}</version>
       </dependency>
 
