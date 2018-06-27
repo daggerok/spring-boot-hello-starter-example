@@ -1,4 +1,4 @@
-package com.github.daggerok.application;
+package com.github.daggerok.starter;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -6,9 +6,9 @@ import org.junit.runner.RunWith;
 //import org.springframework.test.context.junit4.SpringRunner;
 //
 //@RunWith(SpringRunner.class)
-//@SpringBootTest(classes = Application.class,
+//@SpringBootTest(classes = HelloAutoConfiguration.class,
 //    webEnvironment = SpringBootTest.WebEnvironment.NONE)
-public class ApplicationTests {
+public class HelloAutoConfigurationTests {
 
   @Test
   public void contextLoads() { }

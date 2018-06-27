@@ -1,4 +1,4 @@
-package com.github.daggerok.application;
+package com.github.daggerok.starter;
 
 //import com.github.daggerok.library.HelloAutoConfiguration;
 //import org.springframework.boot.SpringApplication;
@@ -7,9 +7,9 @@ package com.github.daggerok.application;
 //
 //@SpringBootApplication
 //@Import({ HelloAutoConfiguration.class })
-public class Application {
+public class HelloAutoConfiguration {
 
 //  public static void main(String[] args) {
-//    SpringApplication.run(Application.class, args);
+//    SpringApplication.run(HelloAutoConfiguration.class, args);
 //  }
 }
