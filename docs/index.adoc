@@ -175,3 +175,9 @@ ifdef::backend-html5[- link:./index.pdf[Documentation in PFD format]]
 - link:https://daggerok.gitlab.io/{root-project-name}[GitLab pages]
 - link:{bitbucket-url}[BitBucket repo]
 ////
+
+== Other links
+
+- link:https://www.youtube.com/watch?v=N39hpGAT43s
+- link:https://github.com/snicoll-demos/hello-service-auto-configuration
+- link:https://github.com/snicoll/amqp-10-jms-spring-boot
