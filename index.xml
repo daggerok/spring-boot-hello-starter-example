@@ -4,7 +4,7 @@
 <book xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>spring-boot-starter-example (0.0.1-SNAPSHOT)</title>
-<date>2018-06-27 08:28:32 UTC</date>
+<date>2018-06-27 10:43:19 UTC</date>
 <author>
 <personname>
 <firstname>Maksim</firstname>
@@ -16,7 +16,7 @@
 <revhistory>
 <revision>
 <revnumber>0.0.1-SNAPSHOT</revnumber>
-<date>2018-06-27 08:28:32 UTC</date>
+<date>2018-06-27 10:43:19 UTC</date>
 <authorinitials>MK</authorinitials>
 </revision>
 </revhistory>
@@ -42,15 +42,263 @@
 <simpara>To create starter we need minimal projects structure:</simpara>
 <itemizedlist>
 <listitem>
-<simpara>autoconfigure project: <literal>spring-boot-starter-hello-autoconfigure</literal></simpara>
+<simpara>service with functionality we wanna expose / integrate: <literal>hello-service</literal></simpara>
 </listitem>
 <listitem>
-<simpara>start project: <literal>spring-boot-starter-hello</literal></simpara>
+<simpara>module which will be automatically configure that service as far starter was added as a dependency: <literal>hello-service-autoconfigure</literal></simpara>
 </listitem>
 <listitem>
-<simpara>testing project: <literal>spring-boot-starter-hello-tests</literal></simpara>
+<simpara>starter module, containing everything needed (hello-service + auto-config + other dependencies): <literal>spring-boot-starter-hello</literal></simpara>
 </listitem>
 </itemizedlist>
+<note>
+<simpara>we will be using and testing out starter in project: <literal>spring-boot-starter-hello-tests</literal></simpara>
+</note>
+<section xml:id="hello-service">
+<title>hello-service</title>
+<simpara>First, create service with functionality you wanna to share with the world</simpara>
+<programlisting language="bash" linenumbering="unnumbered">mkdir hello-service
+touch hello-service/pom.xml
+# ...</programlisting>
+<simpara>That module contains HelloService we wanna expose:</simpara>
+<formalpara>
+<title>HelloService interface:</title>
+<para>
+<programlisting language="java" linenumbering="unnumbered">/**
+ * Super complex greeting service!
+ */
+public interface HelloService {
+
+  /**
+   * Some javadoc...
+   * @param whom who, we salute?
+   * @return greeting message
+   */
+  String sayHello(final String whom);
+}</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>HelloServiceImpl interface:</title>
+<para>
+<programlisting language="java" linenumbering="unnumbered">public class HelloServiceImpl implements HelloService {
+
+  @Override
+  public String sayHello(String whom) {
+    return null;
+  }
+}</programlisting>
+</para>
+</formalpara>
+</section>
+<section xml:id="hello-service-autoconfigure">
+<title>hello-service-autoconfigure</title>
+<simpara>Next, crete auto-configuration module for hello-service</simpara>
+<programlisting language="bash" linenumbering="unnumbered">mkdir hello-service-autoconfigure
+touch hello-service-autoconfigure/pom.xml
+# ...</programlisting>
+<simpara>That module will depends on <literal>hello-service</literal> module and spring-boot auto-configuration dependencies</simpara>
+<formalpara>
+<title>file <literal>hello-service-autoconfigure/pom.xml</literal>:</title>
+<para>
+<programlisting language="xml" linenumbering="unnumbered">  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+      &lt;artifactId&gt;spring-boot-autoconfigure&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+      &lt;optional&gt;true&lt;/optional&gt;
+      &lt;groupId&gt;com.github.daggerok&lt;/groupId&gt;
+      &lt;artifactId&gt;hello-service&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;</programlisting>
+</para>
+</formalpara>
+<simpara>Here we are creating auto-configuration which is basically will be picked up if <literal>HelloService</literal> class in classpath</simpara>
+<formalpara>
+<title>file <literal>./hello-service-autoconfigure/src/main/java/com/github/daggerok/hello/config/HelloServiceAutoConfiguration.java</literal>:</title>
+<para>
+<programlisting language="java" linenumbering="unnumbered">/**
+ * Apply auto configuration only if {@link HelloService} class is in classpath.
+ */
+@ConditionalOnClass(HelloService.class)
+@Configuration
+public class HelloServiceAutoConfiguration {
+
+  @Bean
+  public HelloService helloService() {
+    final HelloServiceImpl helloService = new HelloServiceImpl();
+    return helloService;
+  }
+}</programlisting>
+</para>
+</formalpara>
+<simpara>To make it happens, we need provide <literal>spring.factories</literal> file, which spring-boot will identify and create needed
+auto-configurations for us if starter in classpath according to conditions</simpara>
+<formalpara>
+<title>file <literal>./hello-service-autoconfigure/src/main/java/com/github/daggerok/hello/config/HelloServiceAutoConfiguration.java</literal>:</title>
+<para>
+<programlisting language="properties" linenumbering="unnumbered">org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.github.daggerok.hello.config.HelloServiceAutoConfiguration</programlisting>
+</para>
+</formalpara>
+</section>
+<section xml:id="spring-boot-starter-hello">
+<title>spring-boot-starter-hello</title>
+<simpara>Now we are ready to go create starter itself</simpara>
+<programlisting language="bash" linenumbering="unnumbered">mkdir spring-boot-starter-hello
+touch spring-boot-starter-hello/pom.xml
+# ...</programlisting>
+<simpara>That starter will define in dependencies everything needed</simpara>
+<formalpara>
+<title>file <literal>spring-boot-starter-hello/pom.xml</literal>:</title>
+<para>
+<programlisting language="xml" linenumbering="unnumbered">  &lt;artifactId&gt;spring-boot-starter-hello&lt;/artifactId&gt;
+  &lt;packaging&gt;jar&lt;/packaging&gt;
+
+  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+      &lt;artifactId&gt;spring-boot-starter&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+      &lt;artifactId&gt;spring-boot-configuration-processor&lt;/artifactId&gt;
+      &lt;optional&gt;true&lt;/optional&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+      &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+      &lt;scope&gt;test&lt;/scope&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+      &lt;groupId&gt;com.github.daggerok&lt;/groupId&gt;
+      &lt;artifactId&gt;hello-service&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+      &lt;groupId&gt;com.github.daggerok&lt;/groupId&gt;
+      &lt;artifactId&gt;hello-service-autoconfigure&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>that module also has auto-configuration <literal>HelloStarterAutoConfiguration.java</literal>:</title>
+<para>
+<programlisting language="java" linenumbering="unnumbered">@ConditionalOnClass(HelloServiceAutoConfiguration.class)
+@ImportAutoConfiguration({ HelloServiceAutoConfiguration.class })
+@Configuration
+public class HelloStarterAutoConfiguration { }</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>and <literal>spring.factories</literal> file:</title>
+<para>
+<programlisting language="properties" linenumbering="unnumbered">org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.github.daggerok.starter.HelloStarterAutoConfiguration</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>it&#8217;s very important test your auto configuration if it&#8217;s properly works:</title>
+<para>
+<programlisting language="java" linenumbering="unnumbered">public class HelloStarterAutoConfigurationTests {
+
+  private ConfigurableApplicationContext context;
+
+  public static class MyEnvironmentTestUtils {
+    public static void addEnvironment(final ConfigurableApplicationContext context, final String... pairs) {
+      TestPropertyValues.of(pairs).applyTo(context);
+    }
+  }
+
+  private void load(Class&lt;?&gt; config, String... environment) {
+    final AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
+    ctx.register(config);
+    MyEnvironmentTestUtils.addEnvironment(ctx, environment);
+    ctx.refresh();
+    this.context = ctx;
+  }
+
+  @Rule
+  public ExpectedException expectedException = ExpectedException.none();
+
+  @Rule
+  public OutputCapture output = new OutputCapture();
+
+  @After
+  public void closeContext() {
+    Optional.ofNullable(context)
+            .ifPresent(ConfigurableApplicationContext::close);
+  }
+
+  @Configuration
+  @ImportAutoConfiguration(HelloStarterAutoConfiguration.class)
+  static class EmptyConfiguration { }
+
+  @Test
+  public void serviceBeanWithEmptyContextIsAutoConfigured() {
+    load(EmptyConfiguration.class);
+    assertThat(context.getBeansOfType(HelloService.class)).hasSize(1);
+  }
+}</programlisting>
+</para>
+</formalpara>
+<note>
+<simpara>Here we are testing that HelloService bean was properly instantiated and found in application context.</simpara>
+</note>
+</section>
+</chapter>
+<chapter xml:id="testing">
+<title>Testing</title>
+<simpara>To test starter, all you need to do is:</simpara>
+<formalpara>
+<title>1. create module for it:</title>
+<para>
+<programlisting language="bash" linenumbering="unnumbered">mkdir spring-boot-starter-hello-tests
+touch spring-boot-starter-hello-tests/pom.xml
+# ...</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>2. add to your pom.xml started:</title>
+<para>
+<programlisting language="bash" linenumbering="unnumbered">  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+      &lt;artifactId&gt;spring-boot-starter&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+      &lt;groupId&gt;com.github.daggerok&lt;/groupId&gt;
+      &lt;artifactId&gt;spring-boot-starter-hello&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+      &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;</programlisting>
+</para>
+</formalpara>
+<formalpara>
+<title>3. and use it like any other spring-boot starters:</title>
+<para>
+<programlisting language="bash" linenumbering="unnumbered">@Log4j2
+@SpringBootApplication
+public class HelloStarterTestApplication {
+  public static void main(String[] args) {
+    final ConfigurableApplicationContext context = SpringApplication.run(HelloStarterTestApplication.class, args);
+    final HelloService helloService = context.getBean(HelloService.class);
+    log.info("Hello result: {}", () -&gt; helloService.sayHello("ololo-trololo"));
+  }
+}</programlisting>
+</para>
+</formalpara>
 </chapter>
 <chapter xml:id="links">
 <title>Links</title>

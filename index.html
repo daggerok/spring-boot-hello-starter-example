@@ -626,14 +626,21 @@ table.CodeRay td.code>pre{padding:0}
 <span id="author" class="author">Maksim Kostromin</span><br>
 <span id="email" class="email"><a href="mailto:daggerok@gmail.com">daggerok@gmail.com</a></span><br>
 <span id="revnumber">version 0.0.1-SNAPSHOT,</span>
-<span id="revdate">2018-06-27 08:28:32 UTC</span>
+<span id="revdate">2018-06-27 10:43:19 UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
 <ul class="sectlevel1">
 <li><a href="#introduction">1. Introduction</a></li>
-<li><a href="#implementation">2. Implementation</a></li>
-<li><a href="#links">3. Links</a></li>
+<li><a href="#implementation">2. Implementation</a>
+<ul class="sectlevel2">
+<li><a href="#hello-service">2.1. hello-service</a></li>
+<li><a href="#hello-service-autoconfigure">2.2. hello-service-autoconfigure</a></li>
+<li><a href="#spring-boot-starter-hello">2.3. spring-boot-starter-hello</a></li>
+</ul>
+</li>
+<li><a href="#testing">3. Testing</a></li>
+<li><a href="#links">4. Links</a></li>
 </ul>
 </div>
 </div>
@@ -669,20 +676,318 @@ table.CodeRay td.code>pre{padding:0}
 <div class="ulist">
 <ul>
 <li>
-<p>autoconfigure project: <code>spring-boot-starter-hello-autoconfigure</code></p>
+<p>service with functionality we wanna expose / integrate: <code>hello-service</code></p>
 </li>
 <li>
-<p>start project: <code>spring-boot-starter-hello</code></p>
+<p>module which will be automatically configure that service as far starter was added as a dependency: <code>hello-service-autoconfigure</code></p>
 </li>
 <li>
-<p>testing project: <code>spring-boot-starter-hello-tests</code></p>
+<p>starter module, containing everything needed (hello-service + auto-config + other dependencies): <code>spring-boot-starter-hello</code></p>
 </li>
 </ul>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+we will be using and testing out starter in project: <code>spring-boot-starter-hello-tests</code>
+</td>
+</tr>
+</table>
+</div>
+<div class="sect2">
+<h3 id="hello-service"><a class="anchor" href="#hello-service"></a>2.1. hello-service</h3>
+<div class="paragraph">
+<p>First, create service with functionality you wanna to share with the world</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">mkdir hello-service
+touch hello-service/pom.xml
+# ...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>That module contains HelloService we wanna expose:</p>
+</div>
+<div class="listingblock">
+<div class="title">HelloService interface:</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">/**
+ * Super complex greeting service!
+ */</span>
+<span class="directive">public</span> <span class="type">interface</span> <span class="class">HelloService</span> {
+
+  <span class="comment">/**
+   * Some javadoc...
+   * @param whom who, we salute?
+   * @return greeting message
+   */</span>
+  <span class="predefined-type">String</span> sayHello(<span class="directive">final</span> <span class="predefined-type">String</span> whom);
+}</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">HelloServiceImpl interface:</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">HelloServiceImpl</span> <span class="directive">implements</span> HelloService {
+
+  <span class="annotation">@Override</span>
+  <span class="directive">public</span> <span class="predefined-type">String</span> sayHello(<span class="predefined-type">String</span> whom) {
+    <span class="keyword">return</span> <span class="predefined-constant">null</span>;
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="hello-service-autoconfigure"><a class="anchor" href="#hello-service-autoconfigure"></a>2.2. hello-service-autoconfigure</h3>
+<div class="paragraph">
+<p>Next, crete auto-configuration module for hello-service</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">mkdir hello-service-autoconfigure
+touch hello-service-autoconfigure/pom.xml
+# ...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>That module will depends on <code>hello-service</code> module and spring-boot auto-configuration dependencies</p>
+</div>
+<div class="listingblock">
+<div class="title">file <code>hello-service-autoconfigure/pom.xml</code>:</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml">  <span class="tag">&lt;dependencies&gt;</span>
+    <span class="tag">&lt;dependency&gt;</span>
+      <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+      <span class="tag">&lt;artifactId&gt;</span>spring-boot-autoconfigure<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;/dependency&gt;</span>
+
+    <span class="tag">&lt;dependency&gt;</span>
+      <span class="tag">&lt;optional&gt;</span>true<span class="tag">&lt;/optional&gt;</span>
+      <span class="tag">&lt;groupId&gt;</span>com.github.daggerok<span class="tag">&lt;/groupId&gt;</span>
+      <span class="tag">&lt;artifactId&gt;</span>hello-service<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;/dependency&gt;</span>
+  <span class="tag">&lt;/dependencies&gt;</span></code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Here we are creating auto-configuration which is basically will be picked up if <code>HelloService</code> class in classpath</p>
+</div>
+<div class="listingblock">
+<div class="title">file <code>./hello-service-autoconfigure/src/main/java/com/github/daggerok/hello/config/HelloServiceAutoConfiguration.java</code>:</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="comment">/**
+ * Apply auto configuration only if {@link HelloService} class is in classpath.
+ */</span>
+<span class="annotation">@ConditionalOnClass</span>(HelloService.class)
+<span class="annotation">@Configuration</span>
+<span class="directive">public</span> <span class="type">class</span> <span class="class">HelloServiceAutoConfiguration</span> {
+
+  <span class="annotation">@Bean</span>
+  <span class="directive">public</span> HelloService helloService() {
+    <span class="directive">final</span> HelloServiceImpl helloService = <span class="keyword">new</span> HelloServiceImpl();
+    <span class="keyword">return</span> helloService;
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>To make it happens, we need provide <code>spring.factories</code> file, which spring-boot will identify and create needed
+auto-configurations for us if starter in classpath according to conditions</p>
+</div>
+<div class="listingblock">
+<div class="title">file <code>./hello-service-autoconfigure/src/main/java/com/github/daggerok/hello/config/HelloServiceAutoConfiguration.java</code>:</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="properties">org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.github.daggerok.hello.config.HelloServiceAutoConfiguration</code></pre>
+</div>
+</div>
+</div>
+<div class="sect2">
+<h3 id="spring-boot-starter-hello"><a class="anchor" href="#spring-boot-starter-hello"></a>2.3. spring-boot-starter-hello</h3>
+<div class="paragraph">
+<p>Now we are ready to go create starter itself</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">mkdir spring-boot-starter-hello
+touch spring-boot-starter-hello/pom.xml
+# ...</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>That starter will define in dependencies everything needed</p>
+</div>
+<div class="listingblock">
+<div class="title">file <code>spring-boot-starter-hello/pom.xml</code>:</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="xml">  <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-hello<span class="tag">&lt;/artifactId&gt;</span>
+  <span class="tag">&lt;packaging&gt;</span>jar<span class="tag">&lt;/packaging&gt;</span>
+
+  <span class="tag">&lt;dependencies&gt;</span>
+    <span class="tag">&lt;dependency&gt;</span>
+      <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+      <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;/dependency&gt;</span>
+
+    <span class="tag">&lt;dependency&gt;</span>
+      <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+      <span class="tag">&lt;artifactId&gt;</span>spring-boot-configuration-processor<span class="tag">&lt;/artifactId&gt;</span>
+      <span class="tag">&lt;optional&gt;</span>true<span class="tag">&lt;/optional&gt;</span>
+    <span class="tag">&lt;/dependency&gt;</span>
+
+    <span class="tag">&lt;dependency&gt;</span>
+      <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+      <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-test<span class="tag">&lt;/artifactId&gt;</span>
+      <span class="tag">&lt;scope&gt;</span>test<span class="tag">&lt;/scope&gt;</span>
+    <span class="tag">&lt;/dependency&gt;</span>
+
+    <span class="tag">&lt;dependency&gt;</span>
+      <span class="tag">&lt;groupId&gt;</span>com.github.daggerok<span class="tag">&lt;/groupId&gt;</span>
+      <span class="tag">&lt;artifactId&gt;</span>hello-service<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;/dependency&gt;</span>
+
+    <span class="tag">&lt;dependency&gt;</span>
+      <span class="tag">&lt;groupId&gt;</span>com.github.daggerok<span class="tag">&lt;/groupId&gt;</span>
+      <span class="tag">&lt;artifactId&gt;</span>hello-service-autoconfigure<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;/dependency&gt;</span>
+  <span class="tag">&lt;/dependencies&gt;</span></code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">that module also has auto-configuration <code>HelloStarterAutoConfiguration.java</code>:</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ConditionalOnClass</span>(HelloServiceAutoConfiguration.class)
+<span class="annotation">@ImportAutoConfiguration</span>({ HelloServiceAutoConfiguration.class })
+<span class="annotation">@Configuration</span>
+<span class="directive">public</span> <span class="type">class</span> <span class="class">HelloStarterAutoConfiguration</span> { }</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">and <code>spring.factories</code> file:</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="properties">org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+  com.github.daggerok.starter.HelloStarterAutoConfiguration</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">it&#8217;s very important test your auto configuration if it&#8217;s properly works:</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">HelloStarterAutoConfigurationTests</span> {
+
+  <span class="directive">private</span> ConfigurableApplicationContext context;
+
+  <span class="directive">public</span> <span class="directive">static</span> <span class="type">class</span> <span class="class">MyEnvironmentTestUtils</span> {
+    <span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> addEnvironment(<span class="directive">final</span> ConfigurableApplicationContext context, <span class="directive">final</span> <span class="predefined-type">String</span>... pairs) {
+      TestPropertyValues.of(pairs).applyTo(context);
+    }
+  }
+
+  <span class="directive">private</span> <span class="type">void</span> load(<span class="predefined-type">Class</span>&lt;?&gt; config, <span class="predefined-type">String</span>... environment) {
+    <span class="directive">final</span> AnnotationConfigApplicationContext ctx = <span class="keyword">new</span> AnnotationConfigApplicationContext();
+    ctx.register(config);
+    MyEnvironmentTestUtils.addEnvironment(ctx, environment);
+    ctx.refresh();
+    <span class="local-variable">this</span>.context = ctx;
+  }
+
+  <span class="annotation">@Rule</span>
+  <span class="directive">public</span> ExpectedException expectedException = ExpectedException.none();
+
+  <span class="annotation">@Rule</span>
+  <span class="directive">public</span> OutputCapture output = <span class="keyword">new</span> OutputCapture();
+
+  <span class="annotation">@After</span>
+  <span class="directive">public</span> <span class="type">void</span> closeContext() {
+    Optional.ofNullable(context)
+            .ifPresent(ConfigurableApplicationContext::close);
+  }
+
+  <span class="annotation">@Configuration</span>
+  <span class="annotation">@ImportAutoConfiguration</span>(HelloStarterAutoConfiguration.class)
+  <span class="directive">static</span> <span class="type">class</span> <span class="class">EmptyConfiguration</span> { }
+
+  <span class="annotation">@Test</span>
+  <span class="directive">public</span> <span class="type">void</span> serviceBeanWithEmptyContextIsAutoConfigured() {
+    load(EmptyConfiguration.class);
+    assertThat(context.getBeansOfType(HelloService.class)).hasSize(<span class="integer">1</span>);
+  }
+}</code></pre>
+</div>
+</div>
+<div class="admonitionblock note">
+<table>
+<tr>
+<td class="icon">
+<i class="fa icon-note" title="Note"></i>
+</td>
+<td class="content">
+Here we are testing that HelloService bean was properly instantiated and found in application context.
+</td>
+</tr>
+</table>
+</div>
 </div>
 </div>
 </div>
 <div class="sect1">
-<h2 id="links"><a class="anchor" href="#links"></a>3. Links</h2>
+<h2 id="testing"><a class="anchor" href="#testing"></a>3. Testing</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>To test starter, all you need to do is:</p>
+</div>
+<div class="listingblock">
+<div class="title">1. create module for it:</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">mkdir spring-boot-starter-hello-tests
+touch spring-boot-starter-hello-tests/pom.xml
+# ...</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">2. add to your pom.xml started:</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">  &lt;dependencies&gt;
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+      &lt;artifactId&gt;spring-boot-starter&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+      &lt;groupId&gt;com.github.daggerok&lt;/groupId&gt;
+      &lt;artifactId&gt;spring-boot-starter-hello&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+
+    &lt;dependency&gt;
+      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+      &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+  &lt;/dependencies&gt;</code></pre>
+</div>
+</div>
+<div class="listingblock">
+<div class="title">3. and use it like any other spring-boot starters:</div>
+<div class="content">
+<pre class="CodeRay highlight"><code data-lang="bash">@Log4j2
+@SpringBootApplication
+public class HelloStarterTestApplication {
+  public static void main(String[] args) {
+    final ConfigurableApplicationContext context = SpringApplication.run(HelloStarterTestApplication.class, args);
+    final HelloService helloService = context.getBean(HelloService.class);
+    log.info(&quot;Hello result: {}&quot;, () -&gt; helloService.sayHello(&quot;ololo-trololo&quot;));
+  }
+}</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="links"><a class="anchor" href="#links"></a>4. Links</h2>
 <div class="sectionbody">
 <div class="ulist">
 <ul>
@@ -703,7 +1008,7 @@ table.CodeRay td.code>pre{padding:0}
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2018-06-27 08:28:32 UTC
+Last updated 2018-06-27 10:43:19 UTC
 </div>
 </div>
 </body>
