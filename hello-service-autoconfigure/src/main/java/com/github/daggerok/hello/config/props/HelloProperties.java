@@ -19,6 +19,16 @@ public class HelloProperties {
   @NoArgsConstructor
   @Accessors(chain = true)
   public static class Hello {
-    String prefix = "Hello, ", suffix = "!";
+    String prefix, suffix;
+
+    public String getPrefix() {
+      return null == prefix || prefix.trim().isEmpty()
+          ? "Hello," : prefix;
+    }
+
+    public String getSuffix() {
+      return null == suffix || suffix.trim().isEmpty()
+          ? "!" : suffix;
+    }
   }
 }
