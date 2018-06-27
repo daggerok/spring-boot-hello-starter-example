@@ -626,7 +626,7 @@ table.CodeRay td.code>pre{padding:0}
 <span id="author" class="author">Maksim Kostromin</span><br>
 <span id="email" class="email"><a href="mailto:daggerok@gmail.com">daggerok@gmail.com</a></span><br>
 <span id="revnumber">version 0.0.1-SNAPSHOT,</span>
-<span id="revdate">2018-06-27 11:37:16 UTC</span>
+<span id="revdate">2018-06-27 12:26:57 UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -741,7 +741,7 @@ touch hello-service/pom.xml
 
   <span class="annotation">@Override</span>
   <span class="directive">public</span> <span class="predefined-type">String</span> sayHello(<span class="predefined-type">String</span> whom) {
-    <span class="keyword">return</span> format(<span class="string"><span class="delimiter">&quot;</span><span class="content">%s%s%s</span><span class="delimiter">&quot;</span></span>, prefix, whom, suffix);
+    <span class="keyword">return</span> format(<span class="string"><span class="delimiter">&quot;</span><span class="content">%s %s%s</span><span class="delimiter">&quot;</span></span>, prefix, whom, suffix);
   }
 }</code></pre>
 </div>
@@ -766,6 +766,12 @@ touch hello-service-autoconfigure/pom.xml
 <div class="title">file <code>hello-service-autoconfigure/pom.xml</code>:</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="xml">  <span class="tag">&lt;dependencies&gt;</span>
+    <span class="tag">&lt;dependency&gt;</span>
+      <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+      <span class="tag">&lt;artifactId&gt;</span>spring-boot-configuration-processor<span class="tag">&lt;/artifactId&gt;</span>
+      <span class="tag">&lt;optional&gt;</span>true<span class="tag">&lt;/optional&gt;</span>
+    <span class="tag">&lt;/dependency&gt;</span>
+
     <span class="tag">&lt;dependency&gt;</span>
       <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
       <span class="tag">&lt;artifactId&gt;</span>spring-boot-autoconfigure<span class="tag">&lt;/artifactId&gt;</span>
@@ -938,7 +944,7 @@ touch spring-boot-starter-hello/pom.xml
 
     <span class="annotation">@Bean</span>
     <span class="directive">public</span> HelloService helloService() {
-      <span class="keyword">return</span> <span class="keyword">new</span> HelloServiceImpl(<span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">&gt;</span><span class="delimiter">&quot;</span></span>);
+      <span class="keyword">return</span> <span class="keyword">new</span> HelloServiceImpl(<span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content"> &gt;</span><span class="delimiter">&quot;</span></span>);
     }
   }
 
@@ -950,7 +956,7 @@ touch spring-boot-starter-hello/pom.xml
         .hasSize(<span class="integer">1</span>);
 
     assertThat(context.getBean(HelloService.class).sayHello(<span class="string"><span class="delimiter">&quot;</span><span class="content">ololo</span><span class="delimiter">&quot;</span></span>))
-        .isEqualTo(<span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;ololo&gt;</span><span class="delimiter">&quot;</span></span>);
+        .isEqualTo(<span class="string"><span class="delimiter">&quot;</span><span class="content">&lt; ololo &gt;</span><span class="delimiter">&quot;</span></span>);
   }
 }</code></pre>
 </div>
@@ -1043,7 +1049,7 @@ touch spring-boot-starter-hello-tests/pom.xml
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2018-06-27 11:37:16 UTC
+Last updated 2018-06-27 12:26:57 UTC
 </div>
 </div>
 </body>
