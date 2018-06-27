@@ -8,7 +8,7 @@
   <version>0.0.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <name>spring-boot-starter-hello-example</name>
+  <name>spring-boot-starter-example</name>
   <description>Spring Boot Starter AutoConfiguration Example</description>
   <url>https://github.com/daggerok/spring-boot-starter-example</url>
 
