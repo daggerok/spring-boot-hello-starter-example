@@ -10,15 +10,15 @@ import org.springframework.stereotype.Component;
 @Component
 @NoArgsConstructor
 @Accessors(chain = true)
-@ConfigurationProperties(prefix = "com.github.daggerok")
+@ConfigurationProperties("com.github.daggerok")
 public class HelloProperties {
 
-  Hello hello;
+  Hello hello = new Hello();
 
   @Data
   @NoArgsConstructor
   @Accessors(chain = true)
   public static class Hello {
-    String prefix, suffix;
+    String prefix = "Hello, ", suffix = "!";
   }
 }

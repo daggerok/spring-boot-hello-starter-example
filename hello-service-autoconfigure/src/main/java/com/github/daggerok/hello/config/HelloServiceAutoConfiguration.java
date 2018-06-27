@@ -6,10 +6,11 @@ import com.github.daggerok.hello.impl.HelloServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static com.github.daggerok.hello.config.props.HelloProperties.Hello;
+import static com.github.daggerok.hello.config.props.HelloProperties.*;
 
 //tag::content[]
 /**
@@ -18,12 +19,14 @@ import static com.github.daggerok.hello.config.props.HelloProperties.Hello;
 @Configuration
 @RequiredArgsConstructor
 @ConditionalOnClass(HelloService.class)
+@EnableConfigurationProperties(HelloProperties.class)
 public class HelloServiceAutoConfiguration {
 
-  @ConditionalOnMissingBean(HelloService.class)
   @Bean
-  public HelloService helloService() {
-    final HelloServiceImpl helloService = new HelloServiceImpl(null, null);
+  @ConditionalOnMissingBean
+  public HelloService helloService(final HelloProperties properties) {
+    final Hello prop = properties.getHello();
+    final HelloServiceImpl helloService = new HelloServiceImpl(prop.getPrefix(), prop.getSuffix());
     return helloService;
   }
 }
