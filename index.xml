@@ -4,7 +4,7 @@
 <book xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>spring-boot-starter-example (0.0.1-SNAPSHOT)</title>
-<date>2018-06-27 12:32:13 UTC</date>
+<date>2018-06-27 23:06:09 UTC</date>
 <author>
 <personname>
 <firstname>Maksim</firstname>
@@ -16,7 +16,7 @@
 <revhistory>
 <revision>
 <revnumber>0.0.1-SNAPSHOT</revnumber>
-<date>2018-06-27 12:32:13 UTC</date>
+<date>2018-06-27 23:06:09 UTC</date>
 <authorinitials>MK</authorinitials>
 </revision>
 </revhistory>
@@ -106,12 +106,7 @@ touch hello-service-autoconfigure/pom.xml
 <title>file <literal>hello-service-autoconfigure/pom.xml</literal>:</title>
 <para>
 <programlisting language="xml" linenumbering="unnumbered">  &lt;dependencies&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-      &lt;artifactId&gt;spring-boot-configuration-processor&lt;/artifactId&gt;
-      &lt;optional&gt;true&lt;/optional&gt;
-    &lt;/dependency&gt;
-
+    &lt;!-- compile --&gt;
     &lt;dependency&gt;
       &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
       &lt;artifactId&gt;spring-boot-autoconfigure&lt;/artifactId&gt;
@@ -121,6 +116,20 @@ touch hello-service-autoconfigure/pom.xml
       &lt;optional&gt;true&lt;/optional&gt;
       &lt;groupId&gt;com.github.daggerok&lt;/groupId&gt;
       &lt;artifactId&gt;hello-service&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+
+    &lt;!-- optional --&gt;
+    &lt;dependency&gt;
+      &lt;optional&gt;true&lt;/optional&gt;
+      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+      &lt;artifactId&gt;spring-boot-configuration-processor&lt;/artifactId&gt;
+    &lt;/dependency&gt;
+
+    &lt;!-- test --&gt;
+    &lt;dependency&gt;
+      &lt;scope&gt;test&lt;/scope&gt;
+      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+      &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
     &lt;/dependency&gt;
   &lt;/dependencies&gt;</programlisting>
 </para>
@@ -142,8 +151,7 @@ public class HelloServiceAutoConfiguration {
   @ConditionalOnMissingBean
   public HelloService helloService(final HelloProperties properties) {
     final Hello prop = properties.getHello();
-    final HelloServiceImpl helloService = new HelloServiceImpl(prop.getPrefix(), prop.getSuffix());
-    return helloService;
+    return new HelloServiceImpl(prop.getPrefix(), prop.getSuffix());
   }
 }</programlisting>
 </para>
@@ -178,18 +186,6 @@ touch spring-boot-starter-hello/pom.xml
     &lt;/dependency&gt;
 
     &lt;dependency&gt;
-      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-      &lt;artifactId&gt;spring-boot-configuration-processor&lt;/artifactId&gt;
-      &lt;optional&gt;true&lt;/optional&gt;
-    &lt;/dependency&gt;
-
-    &lt;dependency&gt;
-      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-      &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
-      &lt;scope&gt;test&lt;/scope&gt;
-    &lt;/dependency&gt;
-
-    &lt;dependency&gt;
       &lt;groupId&gt;com.github.daggerok&lt;/groupId&gt;
       &lt;artifactId&gt;hello-service&lt;/artifactId&gt;
     &lt;/dependency&gt;
@@ -204,89 +200,19 @@ touch spring-boot-starter-hello/pom.xml
 <formalpara>
 <title>that module also has auto-configuration <literal>HelloStarterAutoConfiguration.java</literal>:</title>
 <para>
-<programlisting language="java" linenumbering="unnumbered">@ConditionalOnClass(HelloServiceAutoConfiguration.class)
-@ImportAutoConfiguration({ HelloServiceAutoConfiguration.class })
-@Configuration
-public class HelloStarterAutoConfiguration { }</programlisting>
+<programlisting language="java" linenumbering="unnumbered">Unresolved directive in index.adoc - include::../spring-boot-starter-hello/src/main/java/com/github/daggerok/starter/HelloStarterAutoConfiguration.java[tags=content]</programlisting>
 </para>
 </formalpara>
 <formalpara>
 <title>and <literal>spring.factories</literal> file:</title>
 <para>
-<programlisting language="properties" linenumbering="unnumbered">org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.github.daggerok.starter.HelloStarterAutoConfiguration</programlisting>
+<programlisting language="properties" linenumbering="unnumbered">Unresolved directive in index.adoc - include::../spring-boot-starter-hello/src/main/resources/META-INF/spring.factories[]</programlisting>
 </para>
 </formalpara>
 <formalpara>
 <title>it&#8217;s very important test your auto configuration if it&#8217;s properly works:</title>
 <para>
-<programlisting language="java" linenumbering="unnumbered">public class HelloStarterAutoConfigurationTests {
-
-  private ConfigurableApplicationContext context;
-
-  public static class EnvironmentTestUtils {
-    public static void addEnvironment(final ConfigurableApplicationContext context, final String... pairs) {
-      TestPropertyValues.of(pairs).applyTo(context);
-    }
-  }
-
-  private void load(Class&lt;?&gt; config, String... environment) {
-    final AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
-    ctx.register(config);
-    EnvironmentTestUtils.addEnvironment(ctx, environment);
-    ctx.refresh();
-    this.context = ctx;
-  }
-
-  @Rule
-  public ExpectedException expectedException = ExpectedException.none();
-
-  @Rule
-  public OutputCapture output = new OutputCapture();
-
-  @After
-  public void closeContext() {
-    Optional.ofNullable(context)
-            .ifPresent(ConfigurableApplicationContext::close);
-  }
-
-  @Configuration
-  @ImportAutoConfiguration(HelloStarterAutoConfiguration.class)
-  static class EmptyConfiguration { }
-
-  @Test
-  public void serviceBeanWithEmptyContextIsAutoConfigured() {
-    load(EmptyConfiguration.class);
-
-    assertThat(context.getBeansOfType(HelloService.class))
-        .hasSize(1);
-
-    // default prefix: 'Hello, ', default suffix: '!'
-    assertThat(context.getBean(HelloService.class).sayHello("Maksimko"))
-        .isEqualTo("Hello, Maksimko!");
-  }
-
-  @Configuration
-  @ImportAutoConfiguration(HelloStarterAutoConfiguration.class)
-  public static class UserConfiguration {
-
-    @Bean
-    public HelloService helloService() {
-      return new HelloServiceImpl("&lt;", " &gt;");
-    }
-  }
-
-  @Test
-  public void defaultBeanIsNotCreatingIfUserProvidedOne() {
-    load(UserConfiguration.class);
-
-    assertThat(context.getBeansOfType(HelloService.class))
-        .hasSize(1);
-
-    assertThat(context.getBean(HelloService.class).sayHello("ololo"))
-        .isEqualTo("&lt; ololo &gt;");
-  }
-}</programlisting>
+<programlisting language="java" linenumbering="unnumbered">Unresolved directive in index.adoc - include::../spring-boot-starter-hello/src/test/java/com/github/daggerok/starter/HelloStarterAutoConfigurationTests.java[tags=content]</programlisting>
 </para>
 </formalpara>
 <note>
@@ -317,11 +243,6 @@ touch spring-boot-starter-hello-tests/pom.xml
     &lt;dependency&gt;
       &lt;groupId&gt;com.github.daggerok&lt;/groupId&gt;
       &lt;artifactId&gt;spring-boot-starter-hello&lt;/artifactId&gt;
-    &lt;/dependency&gt;
-
-    &lt;dependency&gt;
-      &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-      &lt;artifactId&gt;spring-boot-starter-test&lt;/artifactId&gt;
     &lt;/dependency&gt;
   &lt;/dependencies&gt;</programlisting>
 </para>

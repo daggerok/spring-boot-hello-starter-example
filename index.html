@@ -626,7 +626,7 @@ table.CodeRay td.code>pre{padding:0}
 <span id="author" class="author">Maksim Kostromin</span><br>
 <span id="email" class="email"><a href="mailto:daggerok@gmail.com">daggerok@gmail.com</a></span><br>
 <span id="revnumber">version 0.0.1-SNAPSHOT,</span>
-<span id="revdate">2018-06-27 12:32:13 UTC</span>
+<span id="revdate">2018-06-27 23:06:09 UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -767,12 +767,7 @@ touch hello-service-autoconfigure/pom.xml
 <div class="title">file <code>hello-service-autoconfigure/pom.xml</code>:</div>
 <div class="content">
 <pre class="CodeRay highlight"><code data-lang="xml">  <span class="tag">&lt;dependencies&gt;</span>
-    <span class="tag">&lt;dependency&gt;</span>
-      <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
-      <span class="tag">&lt;artifactId&gt;</span>spring-boot-configuration-processor<span class="tag">&lt;/artifactId&gt;</span>
-      <span class="tag">&lt;optional&gt;</span>true<span class="tag">&lt;/optional&gt;</span>
-    <span class="tag">&lt;/dependency&gt;</span>
-
+    <span class="comment">&lt;!-- compile --&gt;</span>
     <span class="tag">&lt;dependency&gt;</span>
       <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
       <span class="tag">&lt;artifactId&gt;</span>spring-boot-autoconfigure<span class="tag">&lt;/artifactId&gt;</span>
@@ -782,6 +777,20 @@ touch hello-service-autoconfigure/pom.xml
       <span class="tag">&lt;optional&gt;</span>true<span class="tag">&lt;/optional&gt;</span>
       <span class="tag">&lt;groupId&gt;</span>com.github.daggerok<span class="tag">&lt;/groupId&gt;</span>
       <span class="tag">&lt;artifactId&gt;</span>hello-service<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;/dependency&gt;</span>
+
+    <span class="comment">&lt;!-- optional --&gt;</span>
+    <span class="tag">&lt;dependency&gt;</span>
+      <span class="tag">&lt;optional&gt;</span>true<span class="tag">&lt;/optional&gt;</span>
+      <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+      <span class="tag">&lt;artifactId&gt;</span>spring-boot-configuration-processor<span class="tag">&lt;/artifactId&gt;</span>
+    <span class="tag">&lt;/dependency&gt;</span>
+
+    <span class="comment">&lt;!-- test --&gt;</span>
+    <span class="tag">&lt;dependency&gt;</span>
+      <span class="tag">&lt;scope&gt;</span>test<span class="tag">&lt;/scope&gt;</span>
+      <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
+      <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-test<span class="tag">&lt;/artifactId&gt;</span>
     <span class="tag">&lt;/dependency&gt;</span>
   <span class="tag">&lt;/dependencies&gt;</span></code></pre>
 </div>
@@ -805,8 +814,7 @@ touch hello-service-autoconfigure/pom.xml
   <span class="annotation">@ConditionalOnMissingBean</span>
   <span class="directive">public</span> HelloService helloService(<span class="directive">final</span> HelloProperties properties) {
     <span class="directive">final</span> Hello prop = properties.getHello();
-    <span class="directive">final</span> HelloServiceImpl helloService = <span class="keyword">new</span> HelloServiceImpl(prop.getPrefix(), prop.getSuffix());
-    <span class="keyword">return</span> helloService;
+    <span class="keyword">return</span> <span class="keyword">new</span> HelloServiceImpl(prop.getPrefix(), prop.getSuffix());
   }
 }</code></pre>
 </div>
@@ -851,18 +859,6 @@ touch spring-boot-starter-hello/pom.xml
     <span class="tag">&lt;/dependency&gt;</span>
 
     <span class="tag">&lt;dependency&gt;</span>
-      <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
-      <span class="tag">&lt;artifactId&gt;</span>spring-boot-configuration-processor<span class="tag">&lt;/artifactId&gt;</span>
-      <span class="tag">&lt;optional&gt;</span>true<span class="tag">&lt;/optional&gt;</span>
-    <span class="tag">&lt;/dependency&gt;</span>
-
-    <span class="tag">&lt;dependency&gt;</span>
-      <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
-      <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-test<span class="tag">&lt;/artifactId&gt;</span>
-      <span class="tag">&lt;scope&gt;</span>test<span class="tag">&lt;/scope&gt;</span>
-    <span class="tag">&lt;/dependency&gt;</span>
-
-    <span class="tag">&lt;dependency&gt;</span>
       <span class="tag">&lt;groupId&gt;</span>com.github.daggerok<span class="tag">&lt;/groupId&gt;</span>
       <span class="tag">&lt;artifactId&gt;</span>hello-service<span class="tag">&lt;/artifactId&gt;</span>
     <span class="tag">&lt;/dependency&gt;</span>
@@ -877,89 +873,19 @@ touch spring-boot-starter-hello/pom.xml
 <div class="listingblock">
 <div class="title">that module also has auto-configuration <code>HelloStarterAutoConfiguration.java</code>:</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="annotation">@ConditionalOnClass</span>(HelloServiceAutoConfiguration.class)
-<span class="annotation">@ImportAutoConfiguration</span>({ HelloServiceAutoConfiguration.class })
-<span class="annotation">@Configuration</span>
-<span class="directive">public</span> <span class="type">class</span> <span class="class">HelloStarterAutoConfiguration</span> { }</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">Unresolved directive in index.adoc - include::../spring-boot-starter-hello/src/main/java/com/github/daggerok/starter/HelloStarterAutoConfiguration.java[tags=content]</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">and <code>spring.factories</code> file:</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="properties">org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.github.daggerok.starter.HelloStarterAutoConfiguration</code></pre>
+<pre class="CodeRay highlight"><code data-lang="properties">Unresolved directive in index.adoc - include::../spring-boot-starter-hello/src/main/resources/META-INF/spring.factories[]</code></pre>
 </div>
 </div>
 <div class="listingblock">
 <div class="title">it&#8217;s very important test your auto configuration if it&#8217;s properly works:</div>
 <div class="content">
-<pre class="CodeRay highlight"><code data-lang="java"><span class="directive">public</span> <span class="type">class</span> <span class="class">HelloStarterAutoConfigurationTests</span> {
-
-  <span class="directive">private</span> ConfigurableApplicationContext context;
-
-  <span class="directive">public</span> <span class="directive">static</span> <span class="type">class</span> <span class="class">EnvironmentTestUtils</span> {
-    <span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> addEnvironment(<span class="directive">final</span> ConfigurableApplicationContext context, <span class="directive">final</span> <span class="predefined-type">String</span>... pairs) {
-      TestPropertyValues.of(pairs).applyTo(context);
-    }
-  }
-
-  <span class="directive">private</span> <span class="type">void</span> load(<span class="predefined-type">Class</span>&lt;?&gt; config, <span class="predefined-type">String</span>... environment) {
-    <span class="directive">final</span> AnnotationConfigApplicationContext ctx = <span class="keyword">new</span> AnnotationConfigApplicationContext();
-    ctx.register(config);
-    EnvironmentTestUtils.addEnvironment(ctx, environment);
-    ctx.refresh();
-    <span class="local-variable">this</span>.context = ctx;
-  }
-
-  <span class="annotation">@Rule</span>
-  <span class="directive">public</span> ExpectedException expectedException = ExpectedException.none();
-
-  <span class="annotation">@Rule</span>
-  <span class="directive">public</span> OutputCapture output = <span class="keyword">new</span> OutputCapture();
-
-  <span class="annotation">@After</span>
-  <span class="directive">public</span> <span class="type">void</span> closeContext() {
-    Optional.ofNullable(context)
-            .ifPresent(ConfigurableApplicationContext::close);
-  }
-
-  <span class="annotation">@Configuration</span>
-  <span class="annotation">@ImportAutoConfiguration</span>(HelloStarterAutoConfiguration.class)
-  <span class="directive">static</span> <span class="type">class</span> <span class="class">EmptyConfiguration</span> { }
-
-  <span class="annotation">@Test</span>
-  <span class="directive">public</span> <span class="type">void</span> serviceBeanWithEmptyContextIsAutoConfigured() {
-    load(EmptyConfiguration.class);
-
-    assertThat(context.getBeansOfType(HelloService.class))
-        .hasSize(<span class="integer">1</span>);
-
-    <span class="comment">// default prefix: 'Hello, ', default suffix: '!'</span>
-    assertThat(context.getBean(HelloService.class).sayHello(<span class="string"><span class="delimiter">&quot;</span><span class="content">Maksimko</span><span class="delimiter">&quot;</span></span>))
-        .isEqualTo(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello, Maksimko!</span><span class="delimiter">&quot;</span></span>);
-  }
-
-  <span class="annotation">@Configuration</span>
-  <span class="annotation">@ImportAutoConfiguration</span>(HelloStarterAutoConfiguration.class)
-  <span class="directive">public</span> <span class="directive">static</span> <span class="type">class</span> <span class="class">UserConfiguration</span> {
-
-    <span class="annotation">@Bean</span>
-    <span class="directive">public</span> HelloService helloService() {
-      <span class="keyword">return</span> <span class="keyword">new</span> HelloServiceImpl(<span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content"> &gt;</span><span class="delimiter">&quot;</span></span>);
-    }
-  }
-
-  <span class="annotation">@Test</span>
-  <span class="directive">public</span> <span class="type">void</span> defaultBeanIsNotCreatingIfUserProvidedOne() {
-    load(UserConfiguration.class);
-
-    assertThat(context.getBeansOfType(HelloService.class))
-        .hasSize(<span class="integer">1</span>);
-
-    assertThat(context.getBean(HelloService.class).sayHello(<span class="string"><span class="delimiter">&quot;</span><span class="content">ololo</span><span class="delimiter">&quot;</span></span>))
-        .isEqualTo(<span class="string"><span class="delimiter">&quot;</span><span class="content">&lt; ololo &gt;</span><span class="delimiter">&quot;</span></span>);
-  }
-}</code></pre>
+<pre class="CodeRay highlight"><code data-lang="java">Unresolved directive in index.adoc - include::../spring-boot-starter-hello/src/test/java/com/github/daggerok/starter/HelloStarterAutoConfigurationTests.java[tags=content]</code></pre>
 </div>
 </div>
 <div class="admonitionblock note">
@@ -1003,11 +929,6 @@ touch spring-boot-starter-hello-tests/pom.xml
     <span class="tag">&lt;dependency&gt;</span>
       <span class="tag">&lt;groupId&gt;</span>com.github.daggerok<span class="tag">&lt;/groupId&gt;</span>
       <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-hello<span class="tag">&lt;/artifactId&gt;</span>
-    <span class="tag">&lt;/dependency&gt;</span>
-
-    <span class="tag">&lt;dependency&gt;</span>
-      <span class="tag">&lt;groupId&gt;</span>org.springframework.boot<span class="tag">&lt;/groupId&gt;</span>
-      <span class="tag">&lt;artifactId&gt;</span>spring-boot-starter-test<span class="tag">&lt;/artifactId&gt;</span>
     <span class="tag">&lt;/dependency&gt;</span>
   <span class="tag">&lt;/dependencies&gt;</span></code></pre>
 </div>
@@ -1068,7 +989,7 @@ touch spring-boot-starter-hello-tests/pom.xml
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2018-06-27 12:32:13 UTC
+Last updated 2018-06-27 23:06:09 UTC
 </div>
 </div>
 </body>
