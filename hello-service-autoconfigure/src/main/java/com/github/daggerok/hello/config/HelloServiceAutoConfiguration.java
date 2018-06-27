@@ -10,7 +10,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
-import static com.github.daggerok.hello.config.props.HelloProperties.*;
+import static com.github.daggerok.hello.config.props.HelloProperties.Hello;
 
 //tag::content[]
 /**
@@ -26,8 +26,7 @@ public class HelloServiceAutoConfiguration {
   @ConditionalOnMissingBean
   public HelloService helloService(final HelloProperties properties) {
     final Hello prop = properties.getHello();
-    final HelloServiceImpl helloService = new HelloServiceImpl(prop.getPrefix(), prop.getSuffix());
-    return helloService;
+    return new HelloServiceImpl(prop.getPrefix(), prop.getSuffix());
   }
 }
 //end::content[]
