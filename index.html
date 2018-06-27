@@ -626,7 +626,7 @@ table.CodeRay td.code>pre{padding:0}
 <span id="author" class="author">Maksim Kostromin</span><br>
 <span id="email" class="email"><a href="mailto:daggerok@gmail.com">daggerok@gmail.com</a></span><br>
 <span id="revnumber">version 0.0.1-SNAPSHOT,</span>
-<span id="revdate">2018-06-27 11:13:26 UTC</span>
+<span id="revdate">2018-06-27 11:37:16 UTC</span>
 </div>
 <div id="toc" class="toc2">
 <div id="toctitle">Table of Contents</div>
@@ -791,12 +791,14 @@ touch hello-service-autoconfigure/pom.xml
 <span class="annotation">@Configuration</span>
 <span class="annotation">@RequiredArgsConstructor</span>
 <span class="annotation">@ConditionalOnClass</span>(HelloService.class)
+<span class="annotation">@EnableConfigurationProperties</span>(HelloProperties.class)
 <span class="directive">public</span> <span class="type">class</span> <span class="class">HelloServiceAutoConfiguration</span> {
 
-  <span class="annotation">@ConditionalOnMissingBean</span>(HelloService.class)
   <span class="annotation">@Bean</span>
-  <span class="directive">public</span> HelloService helloService() {
-    <span class="directive">final</span> HelloServiceImpl helloService = <span class="keyword">new</span> HelloServiceImpl(<span class="predefined-constant">null</span>, <span class="predefined-constant">null</span>);
+  <span class="annotation">@ConditionalOnMissingBean</span>
+  <span class="directive">public</span> HelloService helloService(<span class="directive">final</span> HelloProperties properties) {
+    <span class="directive">final</span> Hello prop = properties.getHello();
+    <span class="directive">final</span> HelloServiceImpl helloService = <span class="keyword">new</span> HelloServiceImpl(prop.getPrefix(), prop.getSuffix());
     <span class="keyword">return</span> helloService;
   }
 }</code></pre>
@@ -888,7 +890,7 @@ touch spring-boot-starter-hello/pom.xml
 
   <span class="directive">private</span> ConfigurableApplicationContext context;
 
-  <span class="directive">public</span> <span class="directive">static</span> <span class="type">class</span> <span class="class">MyEnvironmentTestUtils</span> {
+  <span class="directive">public</span> <span class="directive">static</span> <span class="type">class</span> <span class="class">EnvironmentTestUtils</span> {
     <span class="directive">public</span> <span class="directive">static</span> <span class="type">void</span> addEnvironment(<span class="directive">final</span> ConfigurableApplicationContext context, <span class="directive">final</span> <span class="predefined-type">String</span>... pairs) {
       TestPropertyValues.of(pairs).applyTo(context);
     }
@@ -897,7 +899,7 @@ touch spring-boot-starter-hello/pom.xml
   <span class="directive">private</span> <span class="type">void</span> load(<span class="predefined-type">Class</span>&lt;?&gt; config, <span class="predefined-type">String</span>... environment) {
     <span class="directive">final</span> AnnotationConfigApplicationContext ctx = <span class="keyword">new</span> AnnotationConfigApplicationContext();
     ctx.register(config);
-    MyEnvironmentTestUtils.addEnvironment(ctx, environment);
+    EnvironmentTestUtils.addEnvironment(ctx, environment);
     ctx.refresh();
     <span class="local-variable">this</span>.context = ctx;
   }
@@ -921,7 +923,34 @@ touch spring-boot-starter-hello/pom.xml
   <span class="annotation">@Test</span>
   <span class="directive">public</span> <span class="type">void</span> serviceBeanWithEmptyContextIsAutoConfigured() {
     load(EmptyConfiguration.class);
-    assertThat(context.getBeansOfType(HelloService.class)).hasSize(<span class="integer">1</span>);
+
+    assertThat(context.getBeansOfType(HelloService.class))
+        .hasSize(<span class="integer">1</span>);
+
+    <span class="comment">// default prefix: 'Hello, ', default suffix: '!'</span>
+    assertThat(context.getBean(HelloService.class).sayHello(<span class="string"><span class="delimiter">&quot;</span><span class="content">Maksimko</span><span class="delimiter">&quot;</span></span>))
+        .isEqualTo(<span class="string"><span class="delimiter">&quot;</span><span class="content">Hello, Maksimko!</span><span class="delimiter">&quot;</span></span>);
+  }
+
+  <span class="annotation">@Configuration</span>
+  <span class="annotation">@ImportAutoConfiguration</span>(HelloStarterAutoConfiguration.class)
+  <span class="directive">public</span> <span class="directive">static</span> <span class="type">class</span> <span class="class">UserConfiguration</span> {
+
+    <span class="annotation">@Bean</span>
+    <span class="directive">public</span> HelloService helloService() {
+      <span class="keyword">return</span> <span class="keyword">new</span> HelloServiceImpl(<span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;</span><span class="delimiter">&quot;</span></span>, <span class="string"><span class="delimiter">&quot;</span><span class="content">&gt;</span><span class="delimiter">&quot;</span></span>);
+    }
+  }
+
+  <span class="annotation">@Test</span>
+  <span class="directive">public</span> <span class="type">void</span> defaultBeanIsNotCreatingIfUserProvidedOne() {
+    load(UserConfiguration.class);
+
+    assertThat(context.getBeansOfType(HelloService.class))
+        .hasSize(<span class="integer">1</span>);
+
+    assertThat(context.getBean(HelloService.class).sayHello(<span class="string"><span class="delimiter">&quot;</span><span class="content">ololo</span><span class="delimiter">&quot;</span></span>))
+        .isEqualTo(<span class="string"><span class="delimiter">&quot;</span><span class="content">&lt;ololo&gt;</span><span class="delimiter">&quot;</span></span>);
   }
 }</code></pre>
 </div>
@@ -1014,7 +1043,7 @@ touch spring-boot-starter-hello-tests/pom.xml
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2018-06-27 11:13:26 UTC
+Last updated 2018-06-27 11:37:16 UTC
 </div>
 </div>
 </body>

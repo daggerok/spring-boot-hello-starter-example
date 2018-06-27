@@ -4,7 +4,7 @@
 <book xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>spring-boot-starter-example (0.0.1-SNAPSHOT)</title>
-<date>2018-06-27 11:13:26 UTC</date>
+<date>2018-06-27 11:37:16 UTC</date>
 <author>
 <personname>
 <firstname>Maksim</firstname>
@@ -16,7 +16,7 @@
 <revhistory>
 <revision>
 <revnumber>0.0.1-SNAPSHOT</revnumber>
-<date>2018-06-27 11:13:26 UTC</date>
+<date>2018-06-27 11:37:16 UTC</date>
 <authorinitials>MK</authorinitials>
 </revision>
 </revhistory>
@@ -129,12 +129,14 @@ touch hello-service-autoconfigure/pom.xml
 @Configuration
 @RequiredArgsConstructor
 @ConditionalOnClass(HelloService.class)
+@EnableConfigurationProperties(HelloProperties.class)
 public class HelloServiceAutoConfiguration {
 
-  @ConditionalOnMissingBean(HelloService.class)
   @Bean
-  public HelloService helloService() {
-    final HelloServiceImpl helloService = new HelloServiceImpl(null, null);
+  @ConditionalOnMissingBean
+  public HelloService helloService(final HelloProperties properties) {
+    final Hello prop = properties.getHello();
+    final HelloServiceImpl helloService = new HelloServiceImpl(prop.getPrefix(), prop.getSuffix());
     return helloService;
   }
 }</programlisting>
@@ -216,7 +218,7 @@ public class HelloStarterAutoConfiguration { }</programlisting>
 
   private ConfigurableApplicationContext context;
 
-  public static class MyEnvironmentTestUtils {
+  public static class EnvironmentTestUtils {
     public static void addEnvironment(final ConfigurableApplicationContext context, final String... pairs) {
       TestPropertyValues.of(pairs).applyTo(context);
     }
@@ -225,7 +227,7 @@ public class HelloStarterAutoConfiguration { }</programlisting>
   private void load(Class&lt;?&gt; config, String... environment) {
     final AnnotationConfigApplicationContext ctx = new AnnotationConfigApplicationContext();
     ctx.register(config);
-    MyEnvironmentTestUtils.addEnvironment(ctx, environment);
+    EnvironmentTestUtils.addEnvironment(ctx, environment);
     ctx.refresh();
     this.context = ctx;
   }
@@ -249,7 +251,34 @@ public class HelloStarterAutoConfiguration { }</programlisting>
   @Test
   public void serviceBeanWithEmptyContextIsAutoConfigured() {
     load(EmptyConfiguration.class);
-    assertThat(context.getBeansOfType(HelloService.class)).hasSize(1);
+
+    assertThat(context.getBeansOfType(HelloService.class))
+        .hasSize(1);
+
+    // default prefix: 'Hello, ', default suffix: '!'
+    assertThat(context.getBean(HelloService.class).sayHello("Maksimko"))
+        .isEqualTo("Hello, Maksimko!");
+  }
+
+  @Configuration
+  @ImportAutoConfiguration(HelloStarterAutoConfiguration.class)
+  public static class UserConfiguration {
+
+    @Bean
+    public HelloService helloService() {
+      return new HelloServiceImpl("&lt;", "&gt;");
+    }
+  }
+
+  @Test
+  public void defaultBeanIsNotCreatingIfUserProvidedOne() {
+    load(UserConfiguration.class);
+
+    assertThat(context.getBeansOfType(HelloService.class))
+        .hasSize(1);
+
+    assertThat(context.getBean(HelloService.class).sayHello("ololo"))
+        .isEqualTo("&lt;ololo&gt;");
   }
 }</programlisting>
 </para>
