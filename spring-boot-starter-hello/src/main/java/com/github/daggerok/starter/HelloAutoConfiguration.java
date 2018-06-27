@@ -8,7 +8,6 @@ package com.github.daggerok.starter;
 //@SpringBootApplication
 //@Import({ HelloAutoConfiguration.class })
 public class HelloAutoConfiguration {
-
 //  public static void main(String[] args) {
 //    SpringApplication.run(HelloAutoConfiguration.class, args);
 //  }
