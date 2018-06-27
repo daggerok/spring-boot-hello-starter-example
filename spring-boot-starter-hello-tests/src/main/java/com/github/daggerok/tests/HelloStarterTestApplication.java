@@ -6,8 +6,6 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 
-import java.util.stream.Stream;
-
 //tag::content[]
 @Log4j2
 @SpringBootApplication
@@ -15,7 +13,7 @@ public class HelloStarterTestApplication {
   public static void main(String[] args) {
     final ConfigurableApplicationContext context = SpringApplication.run(HelloStarterTestApplication.class, args);
     final HelloService helloService = context.getBean(HelloService.class);
-    log.info("Hello result: {}", () -> helloService.sayHello("ololo-trololo"));
+    log.info(() -> helloService.sayHello("ololo-trololo"));
   }
 }
 //end::content[]

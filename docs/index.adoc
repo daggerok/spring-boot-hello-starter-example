@@ -154,13 +154,13 @@ touch spring-boot-starter-hello-tests/pom.xml
 ----
 
 .2. add to your pom.xml started:
-[source,bash]
+[source,xml]
 ----
 include::../spring-boot-starter-hello-tests/pom.xml[tags=content]
 ----
 
 .3. and use it like any other spring-boot starters:
-[source,bash]
+[source,java]
 ----
 include::../spring-boot-starter-hello-tests/src/main/java/com/github/daggerok/tests/HelloStarterTestApplication.java[tags=content]
 ----
