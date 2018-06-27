@@ -178,6 +178,6 @@ ifdef::backend-html5[- link:./index.pdf[Documentation in PFD format]]
 
 == Other links
 
-- link:https://www.youtube.com/watch?v=N39hpGAT43s
-- link:https://github.com/snicoll-demos/hello-service-auto-configuration
-- link:https://github.com/snicoll/amqp-10-jms-spring-boot
+- link:https://www.youtube.com/watch?v=N39hpGAT43s[YouTube: It's a kind of magic: under the covers of Spring Boot - Stéphane Nicoll & Andy Wilkinson]
+- link:https://github.com/snicoll-demos/hello-service-auto-configuration[GitHub: snicoll-demos/hello-service-auto-configuration]
+- link:https://github.com/snicoll/amqp-10-jms-spring-boot[other GitHub repo]
