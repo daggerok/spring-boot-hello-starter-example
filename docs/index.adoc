@@ -172,6 +172,7 @@ ifdef::backend-html5[- link:./index.pdf[Documentation in PFD format]]
 - link:https://daggerok.github.io/{root-project-name}[GitHub pages]
 
 ---
+- link:https://www.youtube.com/watch?v=jDchAEHIht0[YouTube: It's a Kind of Magic: Under the Covers of Spring Boot - Brian Clozel, Stéphane Nicoll]
 - link:https://www.youtube.com/watch?v=N39hpGAT43s[YouTube: It's a kind of magic: under the covers of Spring Boot - Stéphane Nicoll & Andy Wilkinson]
 - link:https://www.youtube.com/watch?v=uof5h-j0IeE[YouTube: It's a kind of magic: under the covers of Spring Boot by Stéphane Nicoll & Andy Wilkinson]
 - link:https://github.com/snicoll-demos/hello-service-auto-configuration[GitHub: snicoll-demos/hello-service-auto-configuration]
