@@ -170,14 +170,9 @@ include::../spring-boot-starter-hello-tests/src/main/java/com/github/daggerok/te
 ifdef::backend-html5[- link:./index.pdf[Documentation in PFD format]]
 - link:{github-url}[GitHub repo]
 - link:https://daggerok.github.io/{root-project-name}[GitHub pages]
-////
-- link:{gitlab-url}[GitLab repo]
-- link:https://daggerok.gitlab.io/{root-project-name}[GitLab pages]
-- link:{bitbucket-url}[BitBucket repo]
-////
 
-== Other links
-
+---
 - link:https://www.youtube.com/watch?v=N39hpGAT43s[YouTube: It's a kind of magic: under the covers of Spring Boot - Stéphane Nicoll & Andy Wilkinson]
+- link:https://www.youtube.com/watch?v=uof5h-j0IeE[YouTube: It's a kind of magic: under the covers of Spring Boot by Stéphane Nicoll & Andy Wilkinson]
 - link:https://github.com/snicoll-demos/hello-service-auto-configuration[GitHub: snicoll-demos/hello-service-auto-configuration]
 - link:https://github.com/snicoll/amqp-10-jms-spring-boot[other GitHub repo]
