@@ -4,7 +4,7 @@
 <book xmlns="http://docbook.org/ns/docbook" xmlns:xl="http://www.w3.org/1999/xlink" version="5.0" xml:lang="en">
 <info>
 <title>spring-boot-starter-example (0.0.1-SNAPSHOT)</title>
-<date>2018-07-01 04:42:41 UTC</date>
+<date>2018-07-01 04:43:40 UTC</date>
 <author>
 <personname>
 <firstname>Maksim</firstname>
@@ -16,7 +16,7 @@
 <revhistory>
 <revision>
 <revnumber>0.0.1-SNAPSHOT</revnumber>
-<date>2018-07-01 04:42:41 UTC</date>
+<date>2018-07-01 04:43:40 UTC</date>
 <authorinitials>MK</authorinitials>
 </revision>
 </revhistory>
@@ -274,6 +274,9 @@ public class HelloStarterTestApplication {
 </itemizedlist>
 <simpara><?asciidoc-hr?></simpara>
 <itemizedlist>
+<listitem>
+<simpara><link xl:href="https://www.youtube.com/watch?v=jDchAEHIht0">YouTube: It&#8217;s a Kind of Magic: Under the Covers of Spring Boot - Brian Clozel, Stéphane Nicoll</link></simpara>
+</listitem>
 <listitem>
 <simpara><link xl:href="https://www.youtube.com/watch?v=N39hpGAT43s">YouTube: It&#8217;s a kind of magic: under the covers of Spring Boot - Stéphane Nicoll &amp; Andy Wilkinson</link></simpara>
 </listitem>
